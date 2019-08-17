@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Sad Animal Facts New Tab",
+  "description": "See a random 'sad animal fact' in new tab.",
+  "version": "1.0",
+  "background": {
+    "scripts": ["page.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "storage",
+    "http://fonts.googleapis.com/",
+    "https://fonts.googleapis.com/"
+],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "web_accessible_resources": [
+    "fonts/Schoolbell-Regular.ttf"
+  ]
+}
