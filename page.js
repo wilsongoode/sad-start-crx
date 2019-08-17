@@ -1,11 +1,10 @@
 /* Run these right away */
-//setSadAnimalTabName()
 let image_src = loadImageFromDB();
 let originalName = getSadAnimalTabName(true);
 
 /* Run these only after the DOM is loaded */
 window.onload = function() {
-  updateNameDate();
+  updateNameDate(true);
   const changeName = document.querySelector("#greeting");
   changeName.addEventListener("dblclick", function(e) {
     let boolResult = setSadAnimalTabName();
@@ -63,10 +62,11 @@ function setImage(url) {
  *        chosen name.
  */
 function getSadAnimalTabName(inputReceived) {
-  if (!inputReceived) {
-    return "no input";
-  }
+ 
   if (!localStorage.getItem("sadAnimalTabName")) {
+    if (!inputReceived) {
+      return "no input";
+    }
     let newNameSaved = setSadAnimalTabName();
     if (!newNameSaved) {
       return "no input";
@@ -75,19 +75,12 @@ function getSadAnimalTabName(inputReceived) {
   return localStorage.getItem("sadAnimalTabName");
 }
 
-/* Changes HTML text to show greeting */
-function setGreeting(inputReceived) {
-  let name = getSadAnimalTabName(inputReceived);
-  let greeting = document.getElementById("greeting");
-  greeting.innerHTML = name !== "no input" ? `Hello, ${name}` : "Hello";
-}
-
 /**Prompts user, then attempts to save in localStorage
  *
  * @returns true if user input a string, false otherwise
  */
 function setSadAnimalTabName() {
-  let namePrompt = prompt("Enter your name for the Sad Animal New Tab: ");
+  let namePrompt = prompt("Enter your name for the Sad Animal New Tab: ", getSadAnimalTabName(true));
   if (namePrompt !== null && namePrompt.trim() !== "") {
     console.log("saved new name:", namePrompt);
     localStorage.setItem("sadAnimalTabName", namePrompt);
@@ -97,13 +90,20 @@ function setSadAnimalTabName() {
   }
 }
 
+/* Changes HTML text to show greeting */
+function setGreeting(inputReceived) {
+  let name = getSadAnimalTabName(inputReceived);
+  let greeting = document.getElementById("greeting");
+  greeting.innerHTML = name !== "no input" ? `Hello, ${name}` : "Hello";
+}
+
 /** Formats the date and time
  * 
  * @returns a string representing the current date and time
  */
 function formatAMPM() {
   var d = new Date(),
-    minutes =
+  minutes =
       d.getMinutes().toString().length == 1
         ? "0" + d.getMinutes()
         : d.getMinutes(),
