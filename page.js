@@ -1,3 +1,5 @@
+'use strict'
+
 /* Run these right away */
 let image_src = loadImageFromDB();
 let originalName = getSadAnimalTabName(true);
