@@ -1,24 +1,24 @@
-'use strict'
+"use strict";
 
 /* Run these right away */
 let image_src = loadImageFromDB();
-let originalName = getSadAnimalTabName(true);
+onFirstLoad();
 
 /* Run these only after the DOM is loaded */
 window.onload = function() {
-  updateNameDate(true);
+  updateNameDate();
   const changeName = document.querySelector("#greeting");
   changeName.addEventListener("dblclick", function(e) {
-    let boolResult = setSadAnimalTabName();
-    updateNameDate(boolResult);
+    setSadAnimalTabName();
+    updateNameDate();
   });
   document.getElementById("loader").style.display = "none";
   document.getElementById("content").style.display = "flex";
 };
 
 /* Refreshes name and date on dblclick */
-function updateNameDate(bool) {
-  setGreeting(bool);
+function updateNameDate() {
+  setGreeting();
   setSadAnimalDateTime();
 }
 
@@ -39,8 +39,7 @@ async function loadImageFromDB() {
       setImage(url);
     } else {
       console.log("error");
-      url =
-        "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjpyY-Ct4TkAhVUMn0KHeweB_kQjRx6BAgBEAQ&url=https%3A%2F%2Fpixabay.com%2Fvectors%2Ffalse-error-missing-absent-x-red-2061132%2F&psig=AOvVaw0MnZgbjb9tL1iaXqAikREB&ust=1565943156255387";
+      url = "https://via.placeholder.com/750x650/FFFFFF?text=oops!";
       setImage(url);
     }
   };
@@ -55,57 +54,53 @@ function setImage(url) {
 
 /** Gets name from localStorage
  *
- * If no name inputed, prevents duplicate prompt window
- * once page loads.
- * @param inputReceived: represents whether this call was
- *        initiated after the prompt was dismissed or saved
- *        with an empty string.
- * @returns a string: either "no input" or the user's
- *        chosen name.
+ * @returns either an empty string or the user's chosen name.
  */
-function getSadAnimalTabName(inputReceived) {
- 
-  if (!localStorage.getItem("sadAnimalTabName")) {
-    if (!inputReceived) {
-      return "no input";
-    }
-    let newNameSaved = setSadAnimalTabName();
-    if (!newNameSaved) {
-      return "no input";
-    }
-  }
-  return localStorage.getItem("sadAnimalTabName");
+function getSadAnimalTabName() {
+  let name = localStorage.getItem("sadAnimalTabName");
+  return name || "";
 }
 
-/**Prompts user, then attempts to save in localStorage
+/** Prompts user, then attempts to save in localStorage
  *
- * @returns true if user input a string, false otherwise
+ * @returns true if user pressed OK, false on CANCEL
  */
 function setSadAnimalTabName() {
-  let namePrompt = prompt("Enter your name for the Sad Animal New Tab: ", getSadAnimalTabName(true));
-  if (namePrompt !== null && namePrompt.trim() !== "") {
-    console.log("saved new name:", namePrompt);
-    localStorage.setItem("sadAnimalTabName", namePrompt);
-    return true;
-  } else {
+  let namePrompt = prompt(
+    "Enter your name for the Sad Animal New Tab: ",
+    getSadAnimalTabName()
+  );
+  if (namePrompt === null) {
     return false;
   }
+  console.log("saved new name:", namePrompt);
+  localStorage.setItem("sadAnimalTabName", namePrompt);
+  return true;
 }
 
 /* Changes HTML text to show greeting */
-function setGreeting(inputReceived) {
-  let name = getSadAnimalTabName(inputReceived);
+function setGreeting() {
+  let name = getSadAnimalTabName();
   let greeting = document.getElementById("greeting");
-  greeting.innerHTML = name !== "no input" ? `Hello, ${name}` : "Hello";
+  greeting.innerHTML = name !== "" ? `Hello, ${name}` : "Hello";
+}
+
+/* Checks if this is the first time the extension has been loaded */
+function onFirstLoad() {
+  let check = localStorage.getItem("sadAnimalsPreviouslyLoaded");
+  if (check !== "1") {
+    setSadAnimalTabName();
+    localStorage.setItem("sadAnimalsPreviouslyLoaded", 1);
+  }
 }
 
 /** Formats the date and time
- * 
+ *
  * @returns a string representing the current date and time
  */
 function formatAMPM() {
   var d = new Date(),
-  minutes =
+    minutes =
       d.getMinutes().toString().length == 1
         ? "0" + d.getMinutes()
         : d.getMinutes(),
