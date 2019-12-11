@@ -1,9 +1,4 @@
-@font-face {
-  font-family: "Schoolbell";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../font/Schoolbell-Regular.ttf") format("ttf");
-}
+@import url('https://fonts.googleapis.com/css?family=Schoolbell&display=swap');
 
 html {
   font-family: "Schoolbell", normal;
