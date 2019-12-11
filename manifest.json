@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Sad Animal Facts New Tab",
   "description": "See a random 'sad animal fact' in new tab.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "background": {
     "scripts": ["page.js"],
     "persistent": false
